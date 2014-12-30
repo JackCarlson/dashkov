@@ -88,8 +88,7 @@ int main()
     for (int i = 0; i < 5; i++)
     {
         string output = getResponse("being symbiotically caged", 5 );
-        //string output = rootWord.searchContext("being symbiotically caged")->generate(5);
-        cout << " GNRTD SENTENCE: " << output << endl << endl;
+        cout << output << endl << endl;
     }
 
     return 0;
