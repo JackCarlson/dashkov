@@ -17,5 +17,6 @@ Build the shared object by running `python setup.py build`. The python interface
 
     import dashkov
     dashmod.populate('somefile.txt')
-    reply = dashkov.get_reply('Some string') # returns a string from the markov model
+    reply = dashkov.get_reply('Some string', 15) # returns a string from the markov model. 
+    # the input string is used to seed the model. the integer argument is a maximum of words to return.
     dashkov.learn('Some other string') # add a string to the model
