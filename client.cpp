@@ -23,8 +23,14 @@ void learn( const char *input )
         {
             if ( buffer.length() > 0 )
                 if ( str_in.at(i) == '\n' || str_in.at(i) == '.' )
+                {
                     rootWord.addWord( buffer, true );
-                else rootWord.addWord( buffer, false );
+                }
+                else
+                {
+                    rootWord.addWord( buffer, false );
+                }
+
             buffer = "";
             continue;
         }
