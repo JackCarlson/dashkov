@@ -6,51 +6,84 @@
 #include <time.h>
 #include "dashkov.h"
 
-using namespace std;
+using namespace std; 
 
-int main()
+Word rootWord(true);
+
+void learn( const char *input )
 {
-	Word rootWord(true);
-	Word * prevWord = NULL;
+    string str_in = input;
+    string buffer = "";
 
-	// open text file
-	ifstream fin;
-    fin.open("nightmareabbey.txt");
+    for ( int i = 0; i < str_in.length(); i++ )
+    {
+        buffer += str_in.at(i);
+
+        if ( str_in.at(i) == '\t' || str_in.at(i) == '\n' || str_in.at(i) == ' ' || str_in.at(i) == '\0' )
+        {
+            if ( buffer.length() > 0 )
+                if ( str_in.at(i) == '\n' || str_in.at(i) == '.' )
+                    rootWord.addWord( buffer, true );
+                else rootWord.addWord( buffer, false );
+            buffer = "";
+            continue;
+        }
+    }
+}
+
+void populateChain(const char *filename)
+{
+    Word * prevWord = NULL;
+
+    // open text file
+    ifstream fin;
+    // fin.open("seedText_lyrics.txt");
+    fin.open(filename);
+    //fin.open("bible.txt");
     
     bool sentence_terminator = false;
 
-	unsigned wordCount = 0;
-	string newWord = "";
-	
-	while( !fin.eof() )
-	{
+    unsigned wordCount = 0;
+    string newWord = "";
+    
+    while( !fin.eof() )
+    {
         //if (wordCount % 1000 == 0) cout << "AT: " << wordCount << endl; // debugging fun
-		
-		wordCount++;
-		
-		fin >> newWord; // read the next word
+        
+        wordCount++;
+        
+        fin >> newWord; // read the next word
         
         if(fin.peek() == '\n' || newWord.at(newWord.length() - 1) == '.')
             sentence_terminator = true;
         
-		prevWord = rootWord.seed( newWord, prevWord, sentence_terminator );
+        prevWord = rootWord.seed( newWord, prevWord, sentence_terminator );
 
-		// check if end of line
-		if (sentence_terminator)
-		{
-			prevWord = NULL;
+        // check if end of line
+        if (sentence_terminator)
+        {
+            prevWord = NULL;
             sentence_terminator = false; // reset bool
-		}
-	}
+        }
+    }
 
-	cout << rootWord.getWordCount() << " words total." << endl;
+    cout << rootWord.getWordCount() << " words total." << endl;
+}
 
-	//rootWord.printWords(); // debugging fun
+const char* getResponse(const char *input, int maxwords)
+{
+    return rootWord.searchContext(input)->generate(maxwords).c_str();
+}
 
-	for (int i = 0; i < 5; i++)
-	{
-        cout << rootWord.searchContext("being mildew test2 somewhere test3")->generate( 15 ) << endl << endl;
-	}
+int main()
+{
+    populateChain("nightmareabbey.txt");
+    //rootWord.printWords(); // debugging fun
 
-	return 0;
+    for (int i = 0; i < 5; i++)
+    {
+        cout << getResponse("being test1 test2", 15 ) << endl << endl;
+    }
+
+    return 0;
 }
