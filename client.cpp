@@ -8,7 +8,7 @@
 
 using namespace std; 
 
-Word rootWord(true);
+DBWord rootWord(true);
 
 void learn( const char *input )
 {
@@ -37,7 +37,7 @@ void learn( const char *input )
 
 void populateChain(const char *filename)
 {
-    Word * prevWord = NULL;
+    DBWord * prevWord = NULL;
 
     // open text file
     ifstream fin;
@@ -55,11 +55,13 @@ void populateChain(const char *filename)
         wordCount++;
         
         fin >> newWord; // read the next word
-        
-        if(fin.peek() == '\n' || newWord.at(newWord.length() - 1) == '.')
+
+        char lastChar = newWord.at(newWord.length() - 1);
+
+        if(fin.peek() == '\n' || lastChar == '.' || lastChar == '!' || lastChar == '?' || lastChar == '\'' || lastChar == '"')
             sentence_terminator = true;
         
-        prevWord = rootWord.seed( newWord, prevWord, sentence_terminator );
+        prevWord = (DBWord *)rootWord.seed( newWord, prevWord, sentence_terminator );
 
         // check if end of line
         if (sentence_terminator)
@@ -74,7 +76,8 @@ void populateChain(const char *filename)
 
 const char* getResponse(const char *input, int maxwords)
 {
-    return rootWord.searchContext(input)->generate(maxwords).c_str();
+    string result = rootWord.searchContext(input)->generate(maxwords);
+    return result.c_str();
 }
 
 int main()
@@ -84,7 +87,9 @@ int main()
 
     for (int i = 0; i < 5; i++)
     {
-        cout << getResponse("being symbiotically caged", 15 ) << endl << endl;
+        string output = getResponse("being symbiotically caged", 5 );
+        //string output = rootWord.searchContext("being symbiotically caged")->generate(5);
+        cout << " GNRTD SENTENCE: " << output << endl << endl;
     }
 
     return 0;

@@ -125,7 +125,7 @@ Word* Word::searchContext ( string in_context )
         iter = this->getBeginIter();
         while ( iter != this->getEndIter() )
         {
-            if ( iter->second.word->getWord() == context.at(i) )
+            if ( iter->second.word->getWord() == context.at(i) && iter->second.word->getWordCount() > 0 )
                 return iter->second.word;
 
             iter++;
