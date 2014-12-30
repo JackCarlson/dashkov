@@ -1,8 +1,8 @@
 dashkov
 =======
+C++ text markov chain generator.  Feel free to leverage the code within however you wish!
 
-C++ text markov chain generator
-
+-Jack Carlson (jackattack1@gmail.com)
 
 Building
 --------
