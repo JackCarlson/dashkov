@@ -121,6 +121,7 @@ Word* Word::searchContext ( string in_context )
 
     for ( int i = 0; i < context.size(); i++ )
     {
+        //cout << "trying context : " << context.at(i) << endl;
         iter = this->getBeginIter();
         while ( iter != this->getEndIter() )
         {

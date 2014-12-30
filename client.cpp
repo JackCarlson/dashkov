@@ -4,7 +4,7 @@
 #include <fstream>
 #include <map>
 #include <time.h>
-#include "dashkov.h"
+#include "dbword.h"
 
 using namespace std; 
 
@@ -22,9 +22,13 @@ void learn( const char *input )
         if ( str_in.at(i) == '\t' || str_in.at(i) == '\n' || str_in.at(i) == ' ' || str_in.at(i) == '\0' )
         {
             if ( buffer.length() > 0 )
+            {
                 if ( str_in.at(i) == '\n' || str_in.at(i) == '.' )
                     rootWord.addWord( buffer, true );
-                else rootWord.addWord( buffer, false );
+                else
+                    rootWord.addWord( buffer, false );
+            }
+
             buffer = "";
             continue;
         }
@@ -37,9 +41,7 @@ void populateChain(const char *filename)
 
     // open text file
     ifstream fin;
-    // fin.open("seedText_lyrics.txt");
     fin.open(filename);
-    //fin.open("bible.txt");
     
     bool sentence_terminator = false;
 
@@ -82,7 +84,7 @@ int main()
 
     for (int i = 0; i < 5; i++)
     {
-        cout << getResponse("being test1 test2", 15 ) << endl << endl;
+        cout << getResponse("being symbiotically caged", 15 ) << endl << endl;
     }
 
     return 0;

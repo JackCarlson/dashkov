@@ -1,13 +1,13 @@
 /******************
-DASHKOV.H/CPP
-LAST MAJOR UPDATE
-12 / 29 / 2014
-******************/
+ DBWORD.H/CPP
+ LAST MAJOR UPDATE
+ 12 / 29 / 2014
+ ******************/
 
-#ifndef DASHKOV_H
-#define dashkov_h
+#ifndef DBWORD_H
+#define dbword_h
 
-#include <cstdlib>
+#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -15,31 +15,24 @@ LAST MAJOR UPDATE
 #include <map>
 #include <time.h>
 #include <algorithm>
+#include "dashkov.h"
 
 using namespace std;
 
-class Word;
-struct WordWithCount;
+class DBWord;
 
-struct WordWithCount
-{
-	WordWithCount() {count = 0;}
-	int count;
-	Word* word;
-};
-
-class Word
+class DBWord : public Word
 {
 public:
 	// constructor
-	Word(){}
-	Word( string word, bool sentence_terminator );
-	Word( bool is_root );
+	DBWord(){}
+	DBWord( string word, bool sentence_terminator );
+	DBWord( bool is_root );
 
 	// destructor
-	~Word() {}
+	~DBWord() {}
 
-	Word * addWord ( string in_word, bool sentence_terminator );
+	/*Word * addWord ( string in_word, bool sentence_terminator );
 
 	Word* addWord( Word* in_word );
 
@@ -67,7 +60,7 @@ public:
 
     static bool cmpContextVect(string lhs, string rhs) { return (int)lhs.size() > (int)rhs.size(); }
 
-protected:
+private:
 
     string _word;
 	int _occurrences;
@@ -75,7 +68,7 @@ protected:
 	bool _is_root;
 	map<std::string, WordWithCount> _words;
     bool _debug;
-    bool _terminator;
+    bool _terminator;*/
 };
 
 #endif
