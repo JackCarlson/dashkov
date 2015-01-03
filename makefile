@@ -1,5 +1,5 @@
 all: dashkov.o dbword.o client.o
-	g++ dashkov.o dbword.o client.o -g -o dashkovgen
+	g++ dashkov.o dbword.o client.o -g -o dashkovgen -lsqlite3
 
 client.o: dashkov.o client.cpp
 	g++ client.cpp -g -c -o client.o

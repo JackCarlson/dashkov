@@ -8,12 +8,31 @@
 
 using namespace std; 
 
-DBWord rootWord(true);
+DBWord rootWord;
+
+bool isTerminatorChar( char input )
+{
+    switch ( input )
+    {
+        case '\n':
+        case '.':
+        case '!':
+        case '?':
+        case '\'':
+        case '\"':
+        case '\0':
+            return true;
+        default:
+            return false;
+    }
+}
 
 void learn( const char *input )
 {
+    Word * prevWord = NULL;
     string str_in = input;
     string buffer = "";
+    bool sentence_terminator = false;
 
     for ( int i = 0; i < str_in.length(); i++ )
     {
@@ -23,25 +42,31 @@ void learn( const char *input )
         {
             if ( buffer.length() > 0 )
             {
-                if ( str_in.at(i) == '\n' || str_in.at(i) == '.' )
-                    rootWord.addWord( buffer, true );
-                else
-                    rootWord.addWord( buffer, false );
+                if ( isTerminatorChar( str_in.at(i) ) )
+                    sentence_terminator = true;
+
+                prevWord = rootWord.learn( buffer, prevWord, sentence_terminator );
+            }
+
+            // check if end of line
+            if ( sentence_terminator )
+            {
+                prevWord = NULL;
+                sentence_terminator = false; // reset bool
             }
 
             buffer = "";
-            continue;
         }
     }
 }
 
-void populateChain(const char *filename)
+void populateChain( const char *filename )
 {
-    DBWord * prevWord = NULL;
+    Word * prevWord = NULL;
 
     // open text file
     ifstream fin;
-    fin.open(filename);
+    fin.open( filename );
     
     bool sentence_terminator = false;
 
@@ -56,15 +81,15 @@ void populateChain(const char *filename)
         
         fin >> newWord; // read the next word
 
-        char lastChar = newWord.at(newWord.length() - 1);
+        char lastChar = newWord.at( newWord.length() - 1 );
 
-        if(fin.peek() == '\n' || lastChar == '.' || lastChar == '!' || lastChar == '?' || lastChar == '\'' || lastChar == '"')
+        if( fin.peek() == '\n' || isTerminatorChar( lastChar ) )
             sentence_terminator = true;
         
-        prevWord = (DBWord *)rootWord.seed( newWord, prevWord, sentence_terminator );
+        prevWord = rootWord.learn( newWord, prevWord, sentence_terminator );
 
         // check if end of line
-        if (sentence_terminator)
+        if ( sentence_terminator )
         {
             prevWord = NULL;
             sentence_terminator = false; // reset bool
@@ -74,20 +99,21 @@ void populateChain(const char *filename)
     cout << rootWord.getWordCount() << " words total." << endl;
 }
 
-const char* getResponse(const char *input, int maxwords)
+
+const char* getResponse( const char *input, int maxwords )
 {
-    string result = rootWord.searchContext(input)->generate(maxwords);
+    string result = rootWord.generate( input, maxwords );
     return result.c_str();
 }
 
 int main()
 {
-    populateChain("nightmareabbey.txt");
+    populateChain( "nightmareabbey.txt" );
     //rootWord.printWords(); // debugging fun
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 1; i++)
     {
-        string output = getResponse("being symbiotically caged", 5 );
+        string output = getResponse( "being symbiotically caged", 10 );
         cout << output << endl << endl;
     }
 

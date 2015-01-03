@@ -1,8 +1,8 @@
 /******************
-DASHKOV.H/CPP
-LAST MAJOR UPDATE
-12 / 29 / 2014
-******************/
+ DASHKOV.H/CPP
+ LAST MAJOR UPDATE
+ 01 / 03 / 2015
+ ******************/
 
 #ifndef DASHKOV_H
 #define dashkov_h
@@ -31,7 +31,8 @@ struct WordWithCount
 class Word
 {
 public:
-	// constructor
+
+    // constructor
 	Word(){}
 	Word( string word, bool sentence_terminator );
 	Word( bool is_root );
@@ -39,14 +40,10 @@ public:
 	// destructor
 	~Word() {}
 
-	Word * addWord ( string in_word, bool sentence_terminator );
-
-	Word* addWord( Word* in_word );
-
 	// used for the root node only
-	Word* seed( string in_word, Word * prev_word, bool sentence_terminator );
+	Word * seed( string in_word, Word * prev_word, bool sentence_terminator );
 
-    Word* searchContext ( string in_context );
+    Word * searchContext ( string in_context );
 
 	string generate( int max_words );
 
@@ -68,6 +65,9 @@ public:
     static bool cmpContextVect(string lhs, string rhs) { return (int)lhs.size() > (int)rhs.size(); }
 
 protected:
+
+    Word * addWord ( string in_word, bool sentence_terminator );
+    Word * addWord( Word* in_word );
 
     string _word;
 	int _occurrences;
