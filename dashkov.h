@@ -23,7 +23,7 @@ struct WordWithCount;
 
 struct WordWithCount
 {
-	WordWithCount() {count = 0;}
+	WordWithCount() { count = 0; }
 	int count;
 	Word* word;
 };
@@ -64,7 +64,7 @@ public:
 
     static bool cmpContextVect(string lhs, string rhs) { return (int)lhs.size() > (int)rhs.size(); }
 
-protected:
+private:
 
     Word * addWord ( string in_word, bool sentence_terminator );
     Word * addWord( Word* in_word );

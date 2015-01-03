@@ -22,6 +22,8 @@ public:
     DBWord();
     ~DBWord();
 
+    void loadFromDb();
+
     Word * learn( string new_word, Word * prevWord, bool sentence_terminator );
 
     string generate( string context, int maxWords);
@@ -31,7 +33,11 @@ public:
 private:
 
     bool sqliteOpenDB();
-    static int callback( void *NotUsed, int argc, char **argv, char **azColName );
+    //static int callback( void *NotUsed, int argc, char **argv, char **azColName );
+    int getWordIdFromDB( string in_word );
+    int insertWordToDB( string in_word, bool sentence_terminator ); // returns new word ID
+    void updateWordOccurrenceFromWordID( int word_id );
+    void linkWords( int startWordId, int nextWordId );
 
     Word * _rootWord;
     sqlite3 * _db;

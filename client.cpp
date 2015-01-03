@@ -106,9 +106,15 @@ const char* getResponse( const char *input, int maxwords )
     return result.c_str();
 }
 
+void loadFromDb()
+{
+    rootWord.loadFromDb();
+    cout << rootWord.getWordCount() << " DB words total." << endl;
+}
+
 int main()
 {
-    populateChain( "nightmareabbey.txt" );
+    //populateChain( "nightmareabbey.txt" );
     //rootWord.printWords(); // debugging fun
 
     for (int i = 0; i < 1; i++)
