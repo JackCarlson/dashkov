@@ -1,7 +1,7 @@
 /******************
  DASHKOV.H/CPP
  LAST MAJOR UPDATE
- 12 / 29 / 2014
+ 01 / 03 / 2015
  ******************/
 
 #include "dashkov.h"
@@ -44,6 +44,8 @@ Word * Word::addWord ( string in_word, bool sentence_terminator )
 	{
 		// found it, update the count and occurences
 		_words[in_word].count++;
+        if ( !_words[in_word].word->getTerminator() )
+            _words[in_word].word->setTerminator( sentence_terminator );
 		//_words[in_word].word->incOccurrences();
 	}
 
@@ -73,6 +75,40 @@ Word* Word::addWord( Word* in_word )
 	}
 
 	return _words[in_word->getWord()].word;
+}
+
+void Word::linkWords( string word_start, string word_next )
+{
+    Word * firstWord;
+    Word * secondWord;
+
+    // find first word
+    map<std::string, WordWithCount>::iterator iter = _words.begin();
+    iter = _words.find( word_start );
+
+    if ( iter != _words.end() )
+    {
+        firstWord = _words[word_start].word;
+    }
+    else
+    {
+        return; // word not found
+    }
+
+    // find second word
+    iter = _words.begin();
+    iter = _words.find( word_next );
+
+    if ( iter != _words.end() )
+    {
+        secondWord = _words[word_next].word;
+    }
+    else
+    {
+        return; // word not found
+    }
+
+    firstWord->addWord( secondWord );
 }
 
 // used for the root node only
@@ -121,10 +157,11 @@ Word* Word::searchContext ( string in_context )
 
     for ( int i = 0; i < context.size(); i++ )
     {
+        //cout << "trying context : " << context.at(i) << endl;
         iter = this->getBeginIter();
         while ( iter != this->getEndIter() )
         {
-            if ( iter->second.word->getWord() == context.at(i) )
+            if ( iter->second.word->getWord() == context.at(i) && iter->second.word->getWordCount() > 0 )
                 return iter->second.word;
 
             iter++;
@@ -151,7 +188,7 @@ string Word::generate( int max_words )
 		if ( theWord->getWordCount() == 0 ) return sentence;
 
         // simple way to improve short sentences -- update later
-        if ( i > ( max_words / 2 ) && theWord->isTerminator() ) return sentence;
+        if ( i > ( max_words / 2 ) && theWord->getTerminator() ) return sentence;
 
 		randnum = rand() % theWord->getWordCount();
 		if (_debug) cout << " randnum: " << randnum << endl;

@@ -1,13 +1,13 @@
 /******************
-DASHKOV.H/CPP
-LAST MAJOR UPDATE
-12 / 29 / 2014
-******************/
+ DASHKOV.H/CPP
+ LAST MAJOR UPDATE
+ 01 / 03 / 2015
+ ******************/
 
 #ifndef DASHKOV_H
 #define dashkov_h
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@ struct WordWithCount;
 
 struct WordWithCount
 {
-	WordWithCount() {count = 0;}
+	WordWithCount() { count = 0; }
 	int count;
 	Word* word;
 };
@@ -31,7 +31,8 @@ struct WordWithCount
 class Word
 {
 public:
-	// constructor
+
+    // constructor
 	Word(){}
 	Word( string word, bool sentence_terminator );
 	Word( bool is_root );
@@ -39,14 +40,10 @@ public:
 	// destructor
 	~Word() {}
 
-	Word * addWord ( string in_word, bool sentence_terminator );
-
-	Word* addWord( Word* in_word );
-
 	// used for the root node only
-	Word* seed( string in_word, Word * prev_word, bool sentence_terminator );
+	Word * seed( string in_word, Word * prev_word, bool sentence_terminator );
 
-    Word* searchContext ( string in_context );
+    Word * searchContext ( string in_context );
 
 	string generate( int max_words );
 
@@ -56,7 +53,8 @@ public:
 	int getAvgOccurrences() { return _avg_occurrences; }
 	void calcAvgOccurrences() {}
 	bool isRoot() { return _is_root; }
-    bool isTerminator() { return _terminator; }
+    bool getTerminator() { return _terminator; }
+    void setTerminator( bool terminator ) { _terminator = terminator; }
 
 	int getWordCount() { return _words.size(); }
 
@@ -66,6 +64,10 @@ public:
     void printWords();
 
     static bool cmpContextVect(string lhs, string rhs) { return (int)lhs.size() > (int)rhs.size(); }
+
+    Word * addWord ( string in_word, bool sentence_terminator );
+    Word * addWord( Word* in_word );
+    void linkWords( string word_start, string word_next );
 
 private:
 
