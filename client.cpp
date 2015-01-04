@@ -85,9 +85,12 @@ void populateChain( const char *filename )
 
         char lastChar = newWord.at( newWord.length() - 1 );
 
-        if( fin.peek() == '\n' || isTerminatorChar( lastChar ) )
+        if ( fin.peek() == '\n' || isTerminatorChar( lastChar ) )
             sentence_terminator = true;
-        
+
+        if ( sentence_terminator && ( lastChar == ',' || lastChar == '-' || lastChar == ';' ) )
+            sentence_terminator = false;
+
         prevWord = rootWord->learn( newWord, prevWord, sentence_terminator );
 
         // check if end of line
@@ -128,9 +131,9 @@ int main()
     else
         populateChain( "nightmareabbey.txt" );
 
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 5; i++)
     {
-        string output = getResponse( "being symbiotically caged", 10 );
+        string output = getResponse( "being symbiotically caged", 20 );
         cout << output << endl << endl;
     }
 

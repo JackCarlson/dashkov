@@ -127,11 +127,11 @@ Word* Word::seed( string in_word, Word * prev_word, bool sentence_terminator )
 Word* Word::searchContext ( string in_context )
 {
     /*
-     This is probably where the most easy future improvement can come into play.
+     This is probably where the most easy future improvements can come into play.
      For now, just sorts the context by largest word first (presumably most unique),
      then searches all the sub-nodes for the words in order, starts at the first found.
      if none are found, simply returns the current word
-     */
+    */
 
     vector<string> context;
     string buffer = "";
