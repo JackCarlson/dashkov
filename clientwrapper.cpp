@@ -12,8 +12,15 @@ dashkov_populate(PyObject *self, PyObject *args)
     if ( fileExists( "dashkov.db" ) )
         loadFromDb();
     else
-        populateChain( "nightmareabbey.txt" );
+        populateChain( filename );
 
+	Py_RETURN_NONE;
+}
+
+static PyObject *
+dashkov_load_db(PyObject *self, PyObject *args)
+{
+	loadFromDb();
 	Py_RETURN_NONE;
 }
 
@@ -46,6 +53,7 @@ static PyMethodDef ClientMethods[] = {
 	{"populate", dashkov_populate, METH_VARARGS, "Read text file into markov chain"},
 	{"get_reply", dashkov_get_reply, METH_VARARGS, "Generate a reply"},
 	{"learn", dashkov_learn, METH_VARARGS, "Learn some text"},
+	{"load_db", dashkov_load_db, METH_VARARGS, "Load model from DB"},
 	{NULL, NULL, 0, NULL}
 };
 
