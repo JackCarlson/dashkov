@@ -4,11 +4,12 @@
 #include <fstream>
 #include <map>
 #include <time.h>
+#include <sys/stat.h>
 #include "dbword.h"
 
-using namespace std; 
+using namespace std;
 
-DBWord rootWord;
+DBWord * rootWord;
 
 bool isTerminatorChar( char input )
 {
@@ -45,7 +46,7 @@ void learn( const char *input )
                 if ( isTerminatorChar( str_in.at(i) ) )
                     sentence_terminator = true;
 
-                prevWord = rootWord.learn( buffer, prevWord, sentence_terminator );
+                prevWord = rootWord->learn( buffer, prevWord, sentence_terminator );
             }
 
             // check if end of line
@@ -62,6 +63,7 @@ void learn( const char *input )
 
 void populateChain( const char *filename )
 {
+    rootWord = new DBWord();
     Word * prevWord = NULL;
 
     // open text file
@@ -86,7 +88,7 @@ void populateChain( const char *filename )
         if( fin.peek() == '\n' || isTerminatorChar( lastChar ) )
             sentence_terminator = true;
         
-        prevWord = rootWord.learn( newWord, prevWord, sentence_terminator );
+        prevWord = rootWord->learn( newWord, prevWord, sentence_terminator );
 
         // check if end of line
         if ( sentence_terminator )
@@ -96,27 +98,35 @@ void populateChain( const char *filename )
         }
     }
 
-    cout << rootWord.getWordCount() << " words total." << endl;
+    cout << rootWord->getWordCount() << " words total." << endl;
 }
 
 
 const char* getResponse( const char *input, int maxwords )
 {
-    string result = rootWord.generate( input, maxwords );
+    string result = rootWord->generate( input, maxwords );
     return result.c_str();
 }
 
 void loadFromDb()
 {
-    rootWord.loadFromDb();
-    cout << rootWord.getWordCount() << " DB words total." << endl;
+    rootWord = new DBWord();
+    rootWord->loadFromDb();
+    cout << rootWord->getWordCount() << " DB words total." << endl;
+}
+
+inline bool fileExists ( const string& name )
+{
+    struct stat buffer;
+    return ( stat( name.c_str(), &buffer ) == 0 );
 }
 
 int main()
 {
-    //populateChain( "nightmareabbey.txt" );
-    loadFromDb();
-    //rootWord.printWords(); // debugging fun
+    if ( fileExists( "dashkov.db" ) )
+        loadFromDb();
+    else
+        populateChain( "nightmareabbey.txt" );
 
     for (int i = 0; i < 1; i++)
     {

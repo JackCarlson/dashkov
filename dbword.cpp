@@ -265,8 +265,6 @@ void DBWord::linkWords( int startWordId, int nextWordId )
 
 void DBWord::loadFromDb()
 {
-    cout << "loading from DB..." << endl;
-
     // load words first before links
 
     string sql = "SELECT rowid, * FROM word;";
@@ -327,8 +325,6 @@ void DBWord::loadFromDb()
     }
 
     sqlite3_finalize( statement );
-
-    cout << "...done loading from DB." << endl;
 }
 
 /////// pass-through methods
