@@ -115,6 +115,7 @@ void loadFromDb()
 int main()
 {
     //populateChain( "nightmareabbey.txt" );
+    loadFromDb();
     //rootWord.printWords(); // debugging fun
 
     for (int i = 0; i < 1; i++)

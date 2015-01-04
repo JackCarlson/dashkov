@@ -53,7 +53,8 @@ public:
 	int getAvgOccurrences() { return _avg_occurrences; }
 	void calcAvgOccurrences() {}
 	bool isRoot() { return _is_root; }
-    bool isTerminator() { return _terminator; }
+    bool getTerminator() { return _terminator; }
+    void setTerminator( bool terminator ) { _terminator = terminator; }
 
 	int getWordCount() { return _words.size(); }
 
@@ -64,10 +65,11 @@ public:
 
     static bool cmpContextVect(string lhs, string rhs) { return (int)lhs.size() > (int)rhs.size(); }
 
-private:
-
     Word * addWord ( string in_word, bool sentence_terminator );
     Word * addWord( Word* in_word );
+    void linkWords( string word_start, string word_next );
+
+private:
 
     string _word;
 	int _occurrences;

@@ -33,7 +33,6 @@ public:
 private:
 
     bool sqliteOpenDB();
-    //static int callback( void *NotUsed, int argc, char **argv, char **azColName );
     int getWordIdFromDB( string in_word );
     int insertWordToDB( string in_word, bool sentence_terminator ); // returns new word ID
     void updateWordOccurrenceFromWordID( int word_id );

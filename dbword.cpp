@@ -265,7 +265,70 @@ void DBWord::linkWords( int startWordId, int nextWordId )
 
 void DBWord::loadFromDb()
 {
+    cout << "loading from DB..." << endl;
 
+    // load words first before links
+
+    string sql = "SELECT rowid, * FROM word;";
+    sqlite3_stmt *statement;
+
+    if ( sqlite3_prepare_v2( _db, sql.c_str(), -1, &statement, 0 ) == SQLITE_OK )
+    {
+        while (1)
+        {
+            int res = 0;
+            res = sqlite3_step( statement );
+
+            if ( res == SQLITE_ROW )
+            {
+                int new_rowid = sqlite3_column_int( statement, 0 );
+                string new_word = (char*)sqlite3_column_text( statement, 1 );
+                int new_occurrences = sqlite3_column_int( statement, 2 );
+                bool new_terminator = (bool)sqlite3_column_int( statement, 4 );
+
+                _rootWord->addWord(new_word, new_terminator);
+            }
+            else if ( res == SQLITE_DONE || res==SQLITE_ERROR )
+            {
+                // done, dgaf about errors anymore
+                break;
+            }
+        }
+    }
+
+    sqlite3_finalize( statement );
+
+    // now load the links
+
+    sql = "SELECT w1.word, w2.word, wm.occurrences FROM word_map wm " \
+    "LEFT JOIN word w1 ON wm.word_id = w1.rowid " \
+    "LEFT JOIN word w2 ON wm.next_id = w2.rowid;";
+
+    if ( sqlite3_prepare_v2( _db, sql.c_str(), -1, &statement, 0 ) == SQLITE_OK )
+    {
+        while (1)
+        {
+            int res = 0;
+            res = sqlite3_step( statement );
+
+            if ( res == SQLITE_ROW )
+            {
+                string word1 = (char*)sqlite3_column_text( statement, 0 );
+                string word2 = (char*)sqlite3_column_text( statement, 1 );
+
+                _rootWord->linkWords(word1, word2);
+            }
+            else if ( res == SQLITE_DONE || res==SQLITE_ERROR )
+            {
+                // done, dgaf about errors anymore
+                break;
+            }
+        }
+    }
+
+    sqlite3_finalize( statement );
+
+    cout << "...done loading from DB." << endl;
 }
 
 /////// pass-through methods
@@ -278,4 +341,3 @@ unsigned DBWord::getWordCount()
 {
     return _rootWord->getWordCount();
 }
-
