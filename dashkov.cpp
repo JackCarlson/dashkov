@@ -174,7 +174,7 @@ Word* Word::searchContext ( string in_context )
 string Word::generate( int max_words )
 {
 	// init random number generator
-	srand(time(NULL) + rand());
+	srand( (unsigned int)time(NULL) + rand() );
 	Word* theWord = this;
 	string sentence = "";
 
@@ -182,7 +182,7 @@ string Word::generate( int max_words )
 	int position = 0;
 	map<std::string, WordWithCount>::iterator iter;
 
-	for (int i = 0; i < max_words; i++)
+	for ( int i = 0; i < max_words; i++ )
 	{
         if (_debug) cout << "Word count: " << theWord->getWordCount() << endl;
 		if ( theWord->getWordCount() == 0 ) return sentence;

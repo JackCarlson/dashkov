@@ -56,7 +56,7 @@ public:
     bool getTerminator() { return _terminator; }
     void setTerminator( bool terminator ) { _terminator = terminator; }
 
-	int getWordCount() { return _words.size(); }
+	unsigned long getWordCount() { return _words.size(); }
 
 	map<std::string, WordWithCount>::iterator getBeginIter() { return _words.begin(); }
 	map<std::string, WordWithCount>::iterator getEndIter() { return _words.end(); }

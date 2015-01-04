@@ -9,7 +9,10 @@ dashkov_populate(PyObject *self, PyObject *args)
 	if (!PyArg_ParseTuple(args, "s", &filename))
 		return NULL;
 
-	populateChain(filename);
+    if ( fileExists( "dashkov.db" ) )
+        loadFromDb();
+    else
+        populateChain( "nightmareabbey.txt" );
 
 	Py_RETURN_NONE;
 }

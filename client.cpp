@@ -85,11 +85,8 @@ void populateChain( const char *filename )
 
         char lastChar = newWord.at( newWord.length() - 1 );
 
-        if ( fin.peek() == '\n' || isTerminatorChar( lastChar ) )
+        if ( /* fin.peek() == '\n' && */ isTerminatorChar( lastChar ) )
             sentence_terminator = true;
-
-        if ( sentence_terminator && ( lastChar == ',' || lastChar == '-' || lastChar == ';' ) )
-            sentence_terminator = false;
 
         prevWord = rootWord->learn( newWord, prevWord, sentence_terminator );
 
@@ -133,7 +130,7 @@ int main()
 
     for (int i = 0; i < 5; i++)
     {
-        string output = getResponse( "being symbiotically caged", 20 );
+        string output = getResponse( "eccentric colour persists nightly", 20 );
         cout << output << endl << endl;
     }
 
